@@ -52,12 +52,13 @@
         <div id="quiz"></div>
         <button id="nextButton" style="display: none;">Next Question</button>
         <div id="score" style="display: none;"></div>
+        <button id="moreQuizzes" style="display: none;">More Quizzes</button>
     </div>
 
     <script>
         const quizzes = [
             {
-                title: "General Knowledge",
+                title: "Tutorial Quiz",
                 questions: [
                     {
                         question: "What is the capital of France?",
@@ -83,6 +84,36 @@
                         question: "Who wrote 'Romeo and Juliet'?",
                         options: ["Charles Dickens", "Mark Twain", "William Shakespeare", "J.K. Rowling"],
                         answer: 2
+                    }
+                ]
+            },
+            {
+                title: "General Knowledge",
+                questions: [
+                    {
+                        question: "Who painted the Mona Lisa?",
+                        options: ["Vincent van Gogh", "Leonardo da Vinci", "Pablo Picasso", "Claude Monet"],
+                        answer: 1
+                    },
+                    {
+                        question: "What is the largest planet in our solar system?",
+                        options: ["Earth", "Jupiter", "Saturn", "Mars"],
+                        answer: 1
+                    },
+                    {
+                        question: "What is the capital of Japan?",
+                        options: ["Seoul", "Beijing", "Tokyo", "Bangkok"],
+                        answer: 2
+                    },
+                    {
+                        question: "What is the freezing point of water?",
+                        options: ["0°C", "32°F", "100°C", "212°F"],
+                        answer: 0
+                    },
+                    {
+                        question: "Which element has the chemical symbol 'O'?",
+                        options: ["Gold", "Oxygen", "Silver", "Hydrogen"],
+                        answer: 1
                     }
                 ]
             },
@@ -193,6 +224,7 @@
             document.getElementById('nextButton').style.display = 'none';
             document.getElementById('score').style.display = 'block';
             document.getElementById('score').innerHTML = `Your score: ${score} out of ${quizzes[currentQuizIndex].questions.length}`;
+            document.getElementById('moreQuizzes').style.display = 'block';
         }
 
         document.getElementById('nextButton').onclick = () => {
@@ -202,9 +234,17 @@
             if (currentQuizIndex < quizzes.length) {
                 loadQuiz();
                 document.getElementById('score').style.display = 'none';
+                document.getElementById('moreQuizzes').style.display = 'none';
             } else {
                 alert('No more quizzes available!');
             }
+        };
+
+        document.getElementById('moreQuizzes').onclick = () => {
+            currentQuizIndex = 0; // Reset to first quiz for new quizzes
+            loadQuiz();
+            document.getElementById('score').style.display = 'none';
+            document.getElementById('moreQuizzes').style.display = 'none';
         };
 
         loadQuiz();
