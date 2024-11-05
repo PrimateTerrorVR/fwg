@@ -6,9 +6,44 @@
     <title>Time Passing Fidgets</title>
     <script>
         function fidgetClick(fidgetType) {
-            alert("You clicked the " + fidgetType + "!");
+            const message = "You clicked the " + fidgetType + "!";
+            alert(message);
         }
     </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        footer {
+            margin-top: 40px;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
     <h1>Welcome to the Time Passing Fidgets Website!</h1>
@@ -22,15 +57,12 @@
         <button onclick="fidgetClick('Tangle Toy')">🔗 Tangle Toy</button>
     </div>
 
-    <h2>How to Use</h2>
-    <p>Just click on any of the fidget toys above to see a fun alert! This website is designed to help you pass the time in a playful way.</p>
-
     <h2>More Fidgets</h2>
-    <ul>
-        <li><button onclick="fidgetClick('Bubble Wrap')">📦 Bubble Wrap</button></li>
-        <li><button onclick="fidgetClick('Slime')">🦠 Slime</button></li>
-        <li><button onclick="fidgetClick('Putty')">🧪 Putty</button></li>
-    </ul>
+    <div>
+        <button onclick="fidgetClick('Bubble Wrap')">📦 Bubble Wrap</button>
+        <button onclick="fidgetClick('Slime')">🦠 Slime</button>
+        <button onclick="fidgetClick('Putty')">🧪 Putty</button>
+    </div>
 
     <footer>
         <p>© 2024 Time Passing Fidgets. All rights reserved.</p>
