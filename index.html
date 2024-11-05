@@ -9,6 +9,12 @@
 <body>
     <h1>Quiz Game</h1>
     <div id="categories"></div>
+    <div id="quiz-container" class="hidden">
+        <h2 id="question-title"></h2>
+        <div id="options"></div>
+        <p id="feedback"></p>
+        <button id="next-button" class="hidden">Next Question</button>
+    </div>
 
     <script>
         const categories = [
@@ -52,45 +58,86 @@
             }
         ];
 
+        let currentCategory = null;
+        let currentQuestionIndex = 0;
+
         // Add categories to the page
         const categoriesContainer = document.getElementById('categories');
         categories.forEach((category, index) => {
-            const categoryDiv = document.createElement('div');
-            categoryDiv.classList.add('category');
-            categoryDiv.innerHTML = `<h2>${category.title}</h2>`;
-            
-            category.questions.forEach((questionObj, questionIndex) => {
-                const questionDiv = document.createElement('div');
-                questionDiv.classList.add('question');
-                questionDiv.innerHTML = `
-                    <p>${questionIndex + 1}. ${questionObj.question}</p>
-                    <div class="options">
-                        ${questionObj.options.map((option, optionIndex) => `
-                            <button onclick="checkAnswer(${index}, ${questionIndex}, ${optionIndex})">${option}</button>
-                        `).join('')}
-                    </div>
-                    <p class="feedback" id="feedback-${index}-${questionIndex}"></p>
-                `;
-                categoryDiv.appendChild(questionDiv);
-            });
-
-            categoriesContainer.appendChild(categoryDiv);
+            const button = document.createElement('button');
+            button.textContent = category.title;
+            button.onclick = () => startQuiz(index);
+            categoriesContainer.appendChild(button);
         });
 
-        // Check the answer and update score
-        function checkAnswer(categoryIndex, questionIndex, optionIndex) {
-            const selectedOption = categories[categoryIndex].questions[questionIndex].options[optionIndex];
-            const correctAnswerIndex = categories[categoryIndex].questions[questionIndex].answer;
-            const correctAnswer = categories[categoryIndex].questions[questionIndex].options[correctAnswerIndex];
-            const feedbackElement = document.getElementById(`feedback-${categoryIndex}-${questionIndex}`);
-            
-            if (optionIndex === correctAnswerIndex) {
+        // Start the quiz
+        function startQuiz(categoryIndex) {
+            currentCategory = categories[categoryIndex];
+            currentQuestionIndex = 0;
+            categoriesContainer.classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            showQuestion();
+        }
+
+        // Show question
+        function showQuestion() {
+            const questionObj = currentCategory.questions[currentQuestionIndex];
+            document.getElementById('question-title').textContent = questionObj.question;
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+
+            questionObj.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.onclick = () => selectAnswer(index);
+                optionsContainer.appendChild(button);
+            });
+
+            document.getElementById('next-button').classList.add('hidden');
+            document.getElementById('feedback').textContent = '';
+        }
+
+        // Select an answer
+        function selectAnswer(selectedIndex) {
+            const questionObj = currentCategory.questions[currentQuestionIndex];
+            const correctIndex = questionObj.answer;
+            const feedbackElement = document.getElementById('feedback');
+
+            // Highlight the selected answer
+            const buttons = document.querySelectorAll('#options button');
+            buttons.forEach((button, index) => {
+                button.disabled = true;
+                if (index === correctIndex) {
+                    button.classList.add('correct');
+                } else if (index === selectedIndex) {
+                    button.classList.add('incorrect');
+                }
+            });
+
+            // Show feedback
+            if (selectedIndex === correctIndex) {
                 feedbackElement.textContent = 'Correct!';
-                feedbackElement.style.color = 'green';
             } else {
-                feedbackElement.textContent = `Wrong! The correct answer is: ${correctAnswer}`;
-                feedbackElement.style.color = 'red';
+                feedbackElement.textContent = `Wrong! The correct answer is: ${questionObj.options[correctIndex]}`;
             }
+            document.getElementById('next-button').classList.remove('hidden');
+        }
+
+        // Move to the next question
+        document.getElementById('next-button').onclick = () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentCategory.questions.length) {
+                showQuestion();
+            } else {
+                endQuiz();
+            }
+        };
+
+        // End quiz
+        function endQuiz() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            categoriesContainer.classList.remove('hidden');
+            document.getElementById('feedback').textContent = 'Quiz finished! Select a category to play again.';
         }
     </script>
 </body>
