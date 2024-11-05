@@ -36,3 +36,8 @@ h1 {
 .options button:hover {
     background-color: #0056b3;
 }
+
+.feedback {
+    margin-top: 5px;
+    font-weight: bold;
+}
