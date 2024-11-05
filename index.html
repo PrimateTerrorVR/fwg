@@ -3,357 +3,337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trivia Quiz Website</title>
+    <title>Trivia Quiz</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            color: #333;
-            text-align: center;
             margin: 0;
             padding: 20px;
+            background-color: #f4f4f4;
         }
-        h1 {
-            margin-bottom: 20px;
+        h1, h2 {
+            color: #333;
         }
-        .quiz-container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: auto;
-            max-width: 600px;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 5px;
-        }
-        button:hover {
-            background-color: #0056b3;
+        .category {
+            margin: 10px 0;
         }
         .question {
-            margin: 20px 0;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background: #fff;
         }
-        #score {
-            font-size: 20px;
-            margin-top: 20px;
+        button {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to the Trivia Quiz!</h1>
-    <div class="quiz-container">
-        <div id="quiz"></div>
-        <button id="nextButton" style="display: none;">Next Question</button>
-        <div id="score" style="display: none;"></div>
-        <button id="moreQuizzes" style="display: none;">More Quizzes</button>
-    </div>
+
+    <h1>Trivia Quiz</h1>
+    <div id="categories-container"></div>
+    <div id="questions-container"></div>
+    <button id="submit-button">Submit Answers</button>
 
     <script>
-        const quizzes = [
+        const categories = [
             {
-                title: "General Knowledge",
+                title: "History",
                 questions: [
-                    { question: "What is the capital of France?", options: ["Berlin", "Madrid", "Paris", "Lisbon"], answer: 2 },
-                    { question: "What is 2 + 2?", options: ["3", "4", "5", "6"], answer: 1 },
-                    { question: "What planet is known as the Red Planet?", options: ["Earth", "Mars", "Jupiter", "Saturn"], answer: 1 },
-                    { question: "Which ocean is the largest?", options: ["Atlantic", "Indian", "Arctic", "Pacific"], answer: 3 },
-                    { question: "Who wrote 'Romeo and Juliet'?", options: ["Charles Dickens", "Mark Twain", "William Shakespeare", "J.K. Rowling"], answer: 2 },
-                    // Add 40 more questions for General Knowledge here
-                    { question: "Which country is known as the Land of the Rising Sun?", options: ["China", "Japan", "Thailand", "Vietnam"], answer: 1 },
-                    { question: "What is the smallest country in the world?", options: ["Monaco", "Nauru", "Vatican City", "San Marino"], answer: 2 },
-                    { question: "Who painted the Mona Lisa?", options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Claude Monet"], answer: 2 },
-                    { question: "What is the hardest natural substance on Earth?", options: ["Gold", "Iron", "Diamond", "Emerald"], answer: 2 },
-                    { question: "What is the capital of Canada?", options: ["Toronto", "Vancouver", "Ottawa", "Montreal"], answer: 2 },
-                    { question: "In what year did the Titanic sink?", options: ["1912", "1905", "1920", "1915"], answer: 0 },
-                    { question: "Which element has the chemical symbol 'O'?", options: ["Osmium", "Oxygen", "Gold", "Iron"], answer: 1 },
-                    { question: "What is the tallest mountain in the world?", options: ["K2", "Kangchenjunga", "Lhotse", "Mount Everest"], answer: 3 },
-                    { question: "Who discovered penicillin?", options: ["Marie Curie", "Alexander Fleming", "Louis Pasteur", "Isaac Newton"], answer: 1 },
-                    { question: "What is the largest mammal in the world?", options: ["Elephant", "Blue Whale", "Giraffe", "Great White Shark"], answer: 1 },
-                    { question: "What is the capital of Italy?", options: ["Milan", "Rome", "Venice", "Florence"], answer: 1 },
-                    { question: "What is the main language spoken in Brazil?", options: ["Spanish", "Portuguese", "English", "French"], answer: 1 },
-                    { question: "What is the hardest natural substance on Earth?", options: ["Gold", "Iron", "Diamond", "Emerald"], answer: 2 },
-                    { question: "Who wrote 'Hamlet'?", options: ["Charles Dickens", "William Shakespeare", "Mark Twain", "J.K. Rowling"], answer: 1 },
+                    { question: "Who was the first president of the United States?", options: ["George Washington", "Abraham Lincoln", "Thomas Jefferson", "John Adams"], answer: 0 },
+                    { question: "What year did the Titanic sink?", options: ["1912", "1915", "1905", "1920"], answer: 0 },
+                    { question: "Which war was fought between the North and South in the United States?", options: ["World War I", "World War II", "American Civil War", "Revolutionary War"], answer: 2 },
+                    { question: "What document declared the independence of the American colonies from Britain?", options: ["Articles of Confederation", "Constitution", "Bill of Rights", "Declaration of Independence"], answer: 3 },
+                    { question: "Who wrote the Declaration of Independence?", options: ["George Washington", "Thomas Jefferson", "Benjamin Franklin", "John Adams"], answer: 1 },
+                    { question: "What ancient civilization built the pyramids?", options: ["Babylonians", "Greeks", "Egyptians", "Romans"], answer: 2 },
+                    { question: "Who was known as the 'Iron Lady'?", options: ["Margaret Thatcher", "Angela Merkel", "Golda Meir", "Indira Gandhi"], answer: 0 },
+                    { question: "Which country gifted the Statue of Liberty to the United States?", options: ["France", "Germany", "England", "Italy"], answer: 0 },
+                    { question: "In what year did World War II end?", options: ["1945", "1944", "1939", "1950"], answer: 0 },
+                    { question: "What was the first country to grant women the right to vote?", options: ["United States", "New Zealand", "Finland", "Australia"], answer: 1 },
+                    { question: "Who discovered penicillin?", options: ["Marie Curie", "Alexander Fleming", "Louis Pasteur", "Charles Darwin"], answer: 1 },
+                    { question: "Which U.S. state was the last to become a state?", options: ["Hawaii", "Alaska", "Arizona", "New Mexico"], answer: 0 },
+                    { question: "Who was the first female prime minister of the UK?", options: ["Theresa May", "Margaret Thatcher", "Angela Merkel", "Golda Meir"], answer: 1 },
+                    { question: "What was the main cause of the Great Depression?", options: ["Stock market crash", "World War I", "Oil crisis", "Civil War"], answer: 0 },
+                    { question: "Which empire was ruled by Genghis Khan?", options: ["Ottoman Empire", "Mongol Empire", "Roman Empire", "Byzantine Empire"], answer: 1 },
+                    { question: "Who was the first man to walk on the moon?", options: ["Buzz Aldrin", "Neil Armstrong", "Yuri Gagarin", "John Glenn"], answer: 1 },
+                    { question: "What was the name of the ship that sank after hitting an iceberg?", options: ["Lusitania", "Queen Mary", "Titanic", "Britannic"], answer: 2 },
+                    { question: "Which war did the United States enter in 1917?", options: ["World War I", "World War II", "Korean War", "Vietnam War"], answer: 0 },
+                    { question: "Who is known for the quote 'I think, therefore I am'?", options: ["Descartes", "Plato", "Socrates", "Aristotle"], answer: 0 },
+                    { question: "What ancient wonder was located in Babylon?", options: ["Great Pyramid", "Hanging Gardens", "Statue of Zeus", "Colossus of Rhodes"], answer: 1 },
+                    { question: "Who was the last pharaoh of Egypt?", options: ["Cleopatra", "Nefertiti", "Hatshepsut", "Ramesses II"], answer: 0 },
+                    { question: "Which country was the first to land on the moon?", options: ["Soviet Union", "USA", "China", "India"], answer: 1 },
+                    { question: "What was the main religion of the Roman Empire?", options: ["Christianity", "Judaism", "Paganism", "Hinduism"], answer: 2 },
+                    { question: "Who wrote 'The Art of War'?", options: ["Sun Tzu", "Confucius", "Laozi", "Mencius"], answer: 0 },
+                    { question: "In what year was the Berlin Wall constructed?", options: ["1961", "1958", "1971", "1989"], answer: 0 },
+                    { question: "What event triggered World War I?", options: ["Assassination of Archduke Franz Ferdinand", "Attack on Pearl Harbor", "Invasion of Poland", "Russian Revolution"], answer: 0 },
+                    { question: "Who painted the Mona Lisa?", options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"], answer: 2 },
+                    { question: "What was the first animal to be sent into space?", options: ["Dog", "Cat", "Monkey", "Mouse"], answer: 0 },
+                    { question: "Who was the first female aviator to fly solo across the Atlantic Ocean?", options: ["Amelia Earhart", "Bessie Coleman", "Harriet Quimby", "Jacqueline Cochran"], answer: 0 },
                     { question: "What is the capital of Australia?", options: ["Sydney", "Canberra", "Melbourne", "Brisbane"], answer: 1 },
-                    { question: "Which planet is known for its rings?", options: ["Earth", "Mars", "Saturn", "Jupiter"], answer: 2 },
-                    { question: "Which country is famous for the Great Wall?", options: ["India", "China", "Mexico", "Japan"], answer: 1 },
-                    { question: "What is the currency of Japan?", options: ["Yen", "Won", "Dollar", "Rupee"], answer: 0 },
-                    { question: "What is the largest desert in the world?", options: ["Sahara", "Gobi", "Antarctic", "Arabian"], answer: 2 },
-                    { question: "Who was the first man on the moon?", options: ["Yuri Gagarin", "Neil Armstrong", "Buzz Aldrin", "Michael Collins"], answer: 1 },
-                    { question: "What is the chemical formula for table salt?", options: ["NaCl", "KCl", "CaCl2", "MgCl2"], answer: 0 },
-                    { question: "Which organ is responsible for pumping blood throughout the body?", options: ["Lungs", "Brain", "Heart", "Liver"], answer: 2 },
-                    { question: "What is the largest planet in our solar system?", options: ["Earth", "Mars", "Jupiter", "Saturn"], answer: 2 },
-                    { question: "What year did World War II end?", options: ["1945", "1944", "1939", "1942"], answer: 0 },
-                    { question: "Which gas do plants absorb from the atmosphere?", options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"], answer: 1 },
-                    { question: "What is the capital of Egypt?", options: ["Cairo", "Alexandria", "Giza", "Luxor"], answer: 0 },
-                    { question: "Who is known as the 'Father of Modern Physics'?", options: ["Isaac Newton", "Albert Einstein", "Niels Bohr", "Galileo Galilei"], answer: 1 },
-                    { question: "What is the primary ingredient in guacamole?", options: ["Tomato", "Avocado", "Pepper", "Onion"], answer: 1 },
-                    { question: "What is the boiling point of water?", options: ["90°C", "100°C", "80°C", "110°C"], answer: 1 },
-                    { question: "Which instrument measures atmospheric pressure?", options: ["Thermometer", "Barometer", "Hygrometer", "Altimeter"], answer: 1 },
-                    { question: "What is the largest country in the world?", options: ["Canada", "China", "Russia", "USA"], answer: 2 },
-                    { question: "What is the most spoken language in the world?", options: ["English", "Spanish", "Mandarin", "Hindi"], answer: 2 },
-                    { question: "What is the longest river in the world?", options: ["Amazon", "Nile", "Yangtze", "Mississippi"], answer: 1 },
-                    { question: "Who painted the Sistine Chapel ceiling?", options: ["Michelangelo", "Raphael", "Da Vinci", "Caravaggio"], answer: 0 },
-                    { question: "What is the chemical symbol for gold?", options: ["Au", "Ag", "Pb", "Fe"], answer: 0 },
-                    { question: "What is the capital of Spain?", options: ["Barcelona", "Madrid", "Seville", "Valencia"], answer: 1 },
-                    { question: "Which planet is known as the Earth's twin?", options: ["Mars", "Venus", "Mercury", "Jupiter"], answer: 1 },
-                    { question: "What is the main ingredient in beer?", options: ["Barley", "Rice", "Wheat", "Corn"], answer: 0 },
-                    { question: "What is the currency of the United Kingdom?", options: ["Dollar", "Pound", "Euro", "Yen"], answer: 1 },
-                    { question: "Who discovered America?", options: ["Ferdinand Magellan", "Christopher Columbus", "Marco Polo", "Leif Erikson"], answer: 1 },
-                    { question: "What is the square root of 64?", options: ["6", "7", "8", "9"], answer: 2 },
-                    { question: "What element does 'O' represent on the periodic table?", options: ["Osmium", "Oxygen", "Oganesson", "Oganesson"], answer: 1 },
-                    { question: "What is the capital of Germany?", options: ["Berlin", "Munich", "Frankfurt", "Hamburg"], answer: 0 },
-                    { question: "What is the chemical formula for water?", options: ["H2O", "O2", "H2", "CO2"], answer: 0 },
-                    { question: "Who is the author of '1984'?", options: ["George Orwell", "Aldous Huxley", "F. Scott Fitzgerald", "Ernest Hemingway"], answer: 0 },
-                    { question: "What is the tallest building in the world?", options: ["Burj Khalifa", "Shanghai Tower", "One World Trade Center", "Taipei 101"], answer: 0 },
-                    { question: "What is the main ingredient in bread?", options: ["Flour", "Sugar", "Yeast", "Salt"], answer: 0 },
-                    { question: "What is the freezing point of water?", options: ["0°C", "32°F", "100°C", "212°F"], answer: 0 },
-                    { question: "Which country is home to the kangaroo?", options: ["New Zealand", "Australia", "Canada", "South Africa"], answer: 1 },
-                    { question: "Who wrote 'Pride and Prejudice'?", options: ["Charlotte Brontë", "Jane Austen", "Emily Brontë", "Virginia Woolf"], answer: 1 },
-                    { question: "What is the largest organ in the human body?", options: ["Heart", "Liver", "Skin", "Lungs"], answer: 2 },
-                    { question: "What gas do humans breathe in?", options: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"], answer: 0 },
-                    { question: "What is the capital city of Thailand?", options: ["Bangkok", "Chiang Mai", "Phuket", "Hanoi"], answer: 0 },
-                    { question: "What is the currency of Russia?", options: ["Ruble", "Euro", "Dollar", "Yuan"], answer: 0 },
-                    { question: "Which planet is known for its Great Red Spot?", options: ["Jupiter", "Mars", "Saturn", "Uranus"], answer: 0 },
-                    { question: "What is the capital of South Korea?", options: ["Seoul", "Busan", "Incheon", "Daegu"], answer: 0 },
-                    { question: "Who was the first president of the United States?", options: ["George Washington", "Thomas Jefferson", "Abraham Lincoln", "John Adams"], answer: 0 },
-                    { question: "What is the largest land animal?", options: ["Elephant", "Giraffe", "Rhino", "Hippopotamus"], answer: 0 },
-                    { question: "Which element is represented by the symbol 'Fe'?", options: ["Gold", "Iron", "Silver", "Copper"], answer: 1 },
-                    { question: "Who invented the lightbulb?", options: ["Nikola Tesla", "Thomas Edison", "Alexander Graham Bell", "Albert Einstein"], answer: 1 },
-                    { question: "What is the capital of Greece?", options: ["Athens", "Rome", "Cairo", "Moscow"], answer: 0 },
+                    { question: "In which year did the first manned space flight occur?", options: ["1961", "1957", "1965", "1970"], answer: 0 },
+                    { question: "What was the main purpose of the Lewis and Clark expedition?", options: ["Explore the West", "Find a route to China", "Map the East Coast", "Establish trade routes"], answer: 0 },
+                    { question: "Who is known as the 'Father of Modern Physics'?", options: ["Isaac Newton", "Albert Einstein", "Galileo Galilei", "Stephen Hawking"], answer: 1 },
+                    { question: "What famous battle was fought in 1066?", options: ["Battle of Hastings", "Battle of Agincourt", "Battle of Waterloo", "Battle of Gettysburg"], answer: 0 },
+                    { question: "What year did the first atomic bomb drop?", options: ["1945", "1944", "1946", "1947"], answer: 0 },
+                    { question: "Who was the first woman to fly in space?", options: ["Sally Ride", "Valentina Tereshkova", "Eileen Collins", "Mae Jemison"], answer: 1 },
+                    { question: "Which event is considered the start of the French Revolution?", options: ["Storming of the Bastille", "Establishment of the National Assembly", "Execution of Louis XVI", "Women's March on Versailles"], answer: 0 },
+                    { question: "What was the first successful vaccine developed?", options: ["Polio", "Smallpox", "Measles", "Tetanus"], answer: 1 },
+                    { question: "Who is known as the 'Great Emancipator'?", options: ["Frederick Douglass", "Abraham Lincoln", "Martin Luther King Jr.", "Rosa Parks"], answer: 1 },
+                    { question: "What was the primary cause of the Cold War?", options: ["Ideological conflict", "Territorial disputes", "Economic competition", "Military expansion"], answer: 0 },
+                    { question: "Which country was involved in the Opium Wars?", options: ["China", "India", "Britain", "Japan"], answer: 0 },
+                    { question: "Who was the first emperor of the Roman Empire?", options: ["Julius Caesar", "Augustus", "Nero", "Caligula"], answer: 1 },
+                    { question: "What famous wall was built in China?", options: ["Great Wall", "Hadrian's Wall", "Berlin Wall", "China Wall"], answer: 0 },
+                    { question: "Which civilization is known for its pyramids?", options: ["Mesopotamians", "Indus Valley", "Egyptians", "Aztecs"], answer: 2 },
+                    { question: "Who was the first person to reach the South Pole?", options: ["Roald Amundsen", "Robert Falcon Scott", "Ernest Shackleton", "Ferdinand Magellan"], answer: 0 },
+                    { question: "In which year did the Berlin Wall fall?", options: ["1989", "1990", "1988", "1991"], answer: 0 },
+                    { question: "Who invented the telephone?", options: ["Thomas Edison", "Alexander Graham Bell", "Nikola Tesla", "Guglielmo Marconi"], answer: 1 },
+                    { question: "Which country was formerly known as Persia?", options: ["Iraq", "Iran", "Turkey", "Syria"], answer: 1 },
+                    { question: "What year did the United States declare independence?", options: ["1776", "1783", "1789", "1791"], answer: 0 },
+                    { question: "Who wrote the famous play 'Romeo and Juliet'?", options: ["Charles Dickens", "William Shakespeare", "Jane Austen", "Mark Twain"], answer: 1 }
                 ]
             },
             {
                 title: "Science",
                 questions: [
-                    { question: "What is the chemical formula for water?", options: ["H2O", "O2", "CO2", "N2"], answer: 0 },
-                    { question: "What planet is known as the Red Planet?", options: ["Earth", "Mars", "Jupiter", "Venus"], answer: 1 },
-                    { question: "What gas do plants absorb from the atmosphere?", options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"], answer: 1 },
-                    { question: "What is the process by which plants make their own food?", options: ["Photosynthesis", "Respiration", "Digestion", "Transpiration"], answer: 0 },
-                    { question: "Which part of the cell contains the nucleus?", options: ["Cytoplasm", "Cell Membrane", "Cell Wall", "Ribosome"], answer: 0 },
-                    // Add 40 more questions for Science here
-                    { question: "What is the chemical symbol for gold?", options: ["Au", "Ag", "Pb", "Fe"], answer: 0 },
-                    { question: "What is the largest organ in the human body?", options: ["Heart", "Skin", "Liver", "Brain"], answer: 1 },
-                    { question: "Which planet is known for its rings?", options: ["Earth", "Mars", "Jupiter", "Saturn"], answer: 3 },
-                    { question: "What is the hardest natural substance on Earth?", options: ["Diamond", "Gold", "Iron", "Copper"], answer: 0 },
+                    { question: "What is the chemical symbol for water?", options: ["O2", "H2O", "CO2", "NaCl"], answer: 1 },
+                    { question: "What planet is known as the Red Planet?", options: ["Earth", "Mars", "Jupiter", "Saturn"], answer: 1 },
+                    { question: "What gas do plants absorb from the atmosphere?", options: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Helium"], answer: 2 },
                     { question: "What is the powerhouse of the cell?", options: ["Nucleus", "Mitochondria", "Ribosome", "Endoplasmic Reticulum"], answer: 1 },
-                    { question: "What is the boiling point of water?", options: ["100°C", "90°C", "120°C", "80°C"], answer: 0 },
-                    { question: "What is the study of plants called?", options: ["Zoology", "Botany", "Ecology", "Anthropology"], answer: 1 },
-                    { question: "What is the primary gas in Earth's atmosphere?", options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"], answer: 2 },
-                    { question: "What is the smallest unit of life?", options: ["Cell", "Tissue", "Organ", "Organism"], answer: 0 },
-                    { question: "What type of bond involves the sharing of electron pairs?", options: ["Ionic", "Covalent", "Metallic", "Hydrogen"], answer: 1 },
-                    { question: "What organ is responsible for pumping blood?", options: ["Brain", "Lungs", "Heart", "Liver"], answer: 2 },
-                    { question: "What type of energy is stored in food?", options: ["Nuclear", "Chemical", "Mechanical", "Electrical"], answer: 1 },
-                    { question: "What do you call the process by which liquid water turns into vapor?", options: ["Evaporation", "Condensation", "Precipitation", "Transpiration"], answer: 0 },
-                    { question: "What is the scientific study of the human mind and its functions?", options: ["Sociology", "Psychology", "Anthropology", "Biology"], answer: 1 },
-                    { question: "What is the basic unit of life?", options: ["Atom", "Molecule", "Cell", "Organism"], answer: 2 },
-                    { question: "What do you call a scientist who studies rocks?", options: ["Geologist", "Biologist", "Chemist", "Physicist"], answer: 0 },
-                    { question: "What is the main gas found in the air we breathe?", options: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"], answer: 1 },
-                    { question: "Which part of the plant is responsible for photosynthesis?", options: ["Roots", "Stem", "Leaves", "Flowers"], answer: 2 },
-                    { question: "What is the unit of force?", options: ["Newton", "Joule", "Watt", "Pascal"], answer: 0 },
-                    { question: "Which organ in the human body produces insulin?", options: ["Liver", "Pancreas", "Kidney", "Heart"], answer: 1 },
-                    { question: "What is the study of the universe called?", options: ["Biology", "Astronomy", "Physics", "Chemistry"], answer: 1 },
-                    { question: "What is the common name for H2O?", options: ["Water", "Hydrogen Peroxide", "Salt", "Methane"], answer: 0 },
-                    { question: "Which type of rock is formed by the cooling of magma?", options: ["Sedimentary", "Metamorphic", "Igneous", "Volcanic"], answer: 2 },
+                    { question: "What is the process by which plants make their food?", options: ["Photosynthesis", "Respiration", "Transpiration", "Fermentation"], answer: 0 },
+                    { question: "What is the speed of light?", options: ["299,792 km/s", "150,000 km/s", "300,000 km/s", "299,792 miles/s"], answer: 0 },
+                    { question: "What is the most abundant gas in the Earth's atmosphere?", options: ["Oxygen", "Hydrogen", "Nitrogen", "Carbon Dioxide"], answer: 2 },
+                    { question: "What is the basic unit of life?", options: ["Tissue", "Organ", "Cell", "Organism"], answer: 2 },
+                    { question: "What is the largest organ in the human body?", options: ["Heart", "Liver", "Skin", "Lung"], answer: 2 },
                     { question: "What is the chemical formula for table salt?", options: ["NaCl", "KCl", "CaCl2", "MgCl2"], answer: 0 },
-                    { question: "What is the speed of light?", options: ["300,000 km/s", "150,000 km/s", "1,000,000 km/s", "750,000 km/s"], answer: 0 },
-                    { question: "What do you call an animal that eats both plants and meat?", options: ["Herbivore", "Carnivore", "Omnivore", "Insectivore"], answer: 2 },
-                    { question: "What is the most abundant gas in the Earth's atmosphere?", options: ["Oxygen", "Nitrogen", "Argon", "Carbon Dioxide"], answer: 1 },
-                    { question: "What is the process of cell division called?", options: ["Mitosis", "Meiosis", "Fission", "Fertilization"], answer: 0 },
-                    { question: "What is the main function of red blood cells?", options: ["Transport oxygen", "Fight infections", "Clot blood", "Regulate temperature"], answer: 0 },
-                    { question: "What is the scientific name for the common cold?", options: ["Rhinovirus", "Influenza", "Coronovirus", "Bacteria"], answer: 0 },
-                    { question: "What is the main component of the cell membrane?", options: ["Proteins", "Carbohydrates", "Lipids", "Nucleic Acids"], answer: 2 },
-                    { question: "Which vitamin is produced when the skin is exposed to sunlight?", options: ["Vitamin A", "Vitamin B", "Vitamin C", "Vitamin D"], answer: 3 },
-                    { question: "What part of the brain controls balance?", options: ["Cerebrum", "Cerebellum", "Brainstem", "Hypothalamus"], answer: 1 },
-                    { question: "Which blood type is known as the universal donor?", options: ["A", "B", "AB", "O"], answer: 3 },
-                    { question: "What is the main function of the digestive system?", options: ["Transport oxygen", "Break down food", "Regulate temperature", "Produce hormones"], answer: 1 },
-                    { question: "What is the largest planet in our solar system?", options: ["Earth", "Mars", "Jupiter", "Saturn"], answer: 2 },
-                    { question: "What is the process of converting food into energy called?", options: ["Metabolism", "Digestion", "Photosynthesis", "Respiration"], answer: 0 },
-                    { question: "What type of rock is formed by the accumulation of sediment?", options: ["Igneous", "Metamorphic", "Sedimentary", "Volcanic"], answer: 2 },
-                    { question: "What part of the human body is responsible for the sense of smell?", options: ["Eyes", "Ears", "Nose", "Tongue"], answer: 2 },
-                    { question: "What is the main purpose of white blood cells?", options: ["Transport oxygen", "Clot blood", "Fight infections", "Provide energy"], answer: 2 },
-                    { question: "What is the basic unit of heredity?", options: ["Gene", "Chromosome", "DNA", "RNA"], answer: 0 },
-                    { question: "What is the main purpose of photosynthesis?", options: ["Produce energy", "Produce oxygen", "Produce glucose", "All of the above"], answer: 3 },
-                    { question: "Which part of the human body is primarily responsible for detoxification?", options: ["Kidney", "Liver", "Lungs", "Skin"], answer: 1 },
-                    { question: "What is the primary function of the respiratory system?", options: ["Circulate blood", "Exchange gases", "Digest food", "Regulate temperature"], answer: 1 },
-                    { question: "What is the name of the pigment that gives plants their green color?", options: ["Chlorophyll", "Melanin", "Carotene", "Hemoglobin"], answer: 0 },
-                    { question: "What is the scientific name for the study of fungi?", options: ["Mycology", "Botany", "Zoology", "Entomology"], answer: 0 },
-                    { question: "What type of animal lays eggs?", options: ["Mammals", "Reptiles", "Birds", "All of the above"], answer: 3 },
-                    { question: "What is the most common element in the universe?", options: ["Oxygen", "Hydrogen", "Carbon", "Nitrogen"], answer: 1 },
-                    { question: "Which part of the eye is responsible for controlling the amount of light that enters?", options: ["Lens", "Cornea", "Iris", "Pupil"], answer: 2 },
-                    { question: "What is the chemical symbol for sodium?", options: ["Na", "K", "Ca", "Mg"], answer: 0 },
-                    { question: "Which vitamin is important for vision?", options: ["Vitamin A", "Vitamin B", "Vitamin C", "Vitamin D"], answer: 0 },
-                    { question: "What is the name of the process by which organisms maintain a stable internal environment?", options: ["Metabolism", "Homeostasis", "Digestion", "Growth"], answer: 1 },
-                    { question: "What do you call the fluid that surrounds the brain?", options: ["Cerebrospinal fluid", "Synovial fluid", "Lymph", "Blood"], answer: 0 },
-                    { question: "What is the main function of the skeletal system?", options: ["Support and protect the body", "Produce hormones", "Transport nutrients", "Facilitate movement"], answer: 0 },
+                    { question: "What is the main component of the Sun?", options: ["Hydrogen", "Helium", "Carbon", "Oxygen"], answer: 0 },
+                    { question: "What type of bond involves the sharing of electron pairs?", options: ["Ionic bond", "Covalent bond", "Metallic bond", "Hydrogen bond"], answer: 1 },
+                    { question: "What is the smallest unit of matter?", options: ["Atom", "Molecule", "Cell", "Compound"], answer: 0 },
+                    { question: "What is the process of cell division called?", options: ["Mitosis", "Meiosis", "Binary fission", "Replication"], answer: 0 },
+                    { question: "What is the force that keeps us on the ground?", options: ["Friction", "Gravity", "Magnetism", "Inertia"], answer: 1 },
                     { question: "What type of animal is a dolphin?", options: ["Fish", "Mammal", "Reptile", "Amphibian"], answer: 1 },
-                ]
-            },
-            {
-                title: "History",
-                questions: [
-                    { question: "Who was the first president of the United States?", options: ["George Washington", "Abraham Lincoln", "John Adams", "Thomas Jefferson"], answer: 0 },
-                    { question: "What year did World War II end?", options: ["1945", "1939", "1941", "1944"], answer: 0 },
-                    { question: "Which ancient civilization built the pyramids?", options: ["Romans", "Greeks", "Egyptians", "Mayans"], answer: 2 },
-                    { question: "Who was known as the Maid of Orléans?", options: ["Marie Antoinette", "Joan of Arc", "Cleopatra", "Elizabeth I"], answer: 1 },
-                    { question: "Which empire was ruled by Genghis Khan?", options: ["Mongol Empire", "Ottoman Empire", "Roman Empire", "British Empire"], answer: 0 },
-                    // Add 40 more questions for History here
-                    { question: "Who discovered America?", options: ["Ferdinand Magellan", "Christopher Columbus", "Leif Erikson", "Marco Polo"], answer: 1 },
-                    { question: "What was the main cause of the American Civil War?", options: ["Slavery", "States' rights", "Economic differences", "Taxation"], answer: 0 },
-                    { question: "Who was the first woman to fly solo across the Atlantic?", options: ["Amelia Earhart", "Bessie Coleman", "Harriet Quimby", "Valentina Tereshkova"], answer: 0 },
-                    { question: "What was the name of the ship that carried the Pilgrims to America?", options: ["Mayflower", "Santa Maria", "Titanic", "Bounty"], answer: 0 },
-                    { question: "Which battle is considered the turning point of the American Civil War?", options: ["Gettysburg", "Antietam", "Shiloh", "Vicksburg"], answer: 0 },
-                    { question: "Who was the British Prime Minister during World War II?", options: ["Winston Churchill", "Neville Chamberlain", "Clement Attlee", "Margaret Thatcher"], answer: 0 },
-                    { question: "Which country was formerly known as Persia?", options: ["Iraq", "Iran", "Turkey", "Afghanistan"], answer: 1 },
-                    { question: "What was the first man-made satellite launched into space?", options: ["Vostok 1", "Explorer 1", "Sputnik 1", "Apollo 11"], answer: 2 },
-                    { question: "What year did the Berlin Wall fall?", options: ["1989", "1990", "1987", "1991"], answer: 0 },
-                    { question: "Which U.S. state was the last to be admitted to the Union?", options: ["Hawaii", "Alaska", "Arizona", "New Mexico"], answer: 0 },
-                    { question: "Who was the first man to step on the moon?", options: ["Buzz Aldrin", "Neil Armstrong", "Yuri Gagarin", "Michael Collins"], answer: 1 },
-                    { question: "What was the name of the first artificial Earth satellite?", options: ["Vanguard 1", "Sputnik 1", "Explorer 1", "Telstar"], answer: 1 },
-                    { question: "Which event began World War I?", options: ["Assassination of Archduke Ferdinand", "Invasion of Poland", "Sinking of the Lusitania", "Attack on Pearl Harbor"], answer: 0 },
-                    { question: "Who was the first female Prime Minister of the United Kingdom?", options: ["Theresa May", "Margaret Thatcher", "Angela Merkel", "Indira Gandhi"], answer: 1 },
-                    { question: "What was the main cause of the French Revolution?", options: ["Economic hardship", "Political corruption", "Religious conflict", "Colonial wars"], answer: 0 },
-                    { question: "Who was the author of 'The Prince'?", options: ["Machiavelli", "Plato", "Aristotle", "Socrates"], answer: 0 },
-                    { question: "What was the primary goal of the Lewis and Clark Expedition?", options: ["Explore the western territories", "Map the eastern coast", "Establish trade routes", "Find gold"], answer: 0 },
-                    { question: "What was the name of the treaty that ended World War I?", options: ["Treaty of Versailles", "Treaty of Paris", "Treaty of Ghent", "Treaty of Tordesillas"], answer: 0 },
-                    { question: "Who wrote the Declaration of Independence?", options: ["George Washington", "Thomas Jefferson", "Benjamin Franklin", "John Adams"], answer: 1 },
-                    { question: "What year was the United Nations founded?", options: ["1945", "1948", "1950", "1939"], answer: 0 },
-                    { question: "Which city was the capital of the Roman Empire?", options: ["Athens", "Rome", "Constantinople", "Carthage"], answer: 1 },
-                    { question: "What was the main purpose of the Berlin Wall?", options: ["Prevent people from escaping East Berlin", "Separate East and West Berlin", "Protect against invasions", "Control trade"], answer: 0 },
-                    { question: "Who was the first president of South Africa elected in a fully representative election?", options: ["Nelson Mandela", "F.W. de Klerk", "Thabo Mbeki", "Jacob Zuma"], answer: 0 },
-                    { question: "What was the name of the famous ship that sank in 1912?", options: ["Titanic", "Lusitania", "Andrea Doria", "Queen Mary"], answer: 0 },
-                    { question: "Who was the Russian leader during the Cuban Missile Crisis?", options: ["Joseph Stalin", "Leonid Brezhnev", "Nikita Khrushchev", "Vladimir Lenin"], answer: 2 },
-                    { question: "What was the name of the first artificial Earth satellite launched by the USA?", options: ["Vanguard 1", "Explorer 1", "Sputnik 1", "Telstar"], answer: 1 },
-                    { question: "Which U.S. city was the first to be attacked by a nuclear weapon?", options: ["Tokyo", "Hiroshima", "Nagasaki", "Okinawa"], answer: 1 },
-                    { question: "What year did the American Revolutionary War begin?", options: ["1776", "1775", "1781", "1783"], answer: 1 },
-                    { question: "Who was the first emperor of the Roman Empire?", options: ["Julius Caesar", "Augustus", "Nero", "Caligula"], answer: 1 },
-                    { question: "Which war was fought between the North and South in the United States?", options: ["World War I", "World War II", "American Civil War", "Revolutionary War"], answer: 2 },
-                    { question: "What was the primary cause of the Great Depression?", options: ["Stock market crash", "Drought", "World War I", "Bank failures"], answer: 0 },
-                    { question: "What document declared the independence of the American colonies from Britain?", options: ["Articles of Confederation", "Constitution", "Bill of Rights", "Declaration of Independence"], answer: 3 },
+                    { question: "What is the hardest natural substance on Earth?", options: ["Gold", "Diamond", "Iron", "Quartz"], answer: 1 },
+                    { question: "What is the study of living organisms called?", options: ["Physics", "Chemistry", "Biology", "Geology"], answer: 2 },
+                    { question: "What is the primary function of red blood cells?", options: ["Fight infection", "Carry oxygen", "Clot blood", "Transport nutrients"], answer: 1 },
+                    { question: "What is the common name for the 'great red spot' on Jupiter?", options: ["Hurricane", "Storm", "Whirlpool", "Cyclone"], answer: 1 },
+                    { question: "What part of the plant is responsible for photosynthesis?", options: ["Roots", "Stem", "Leaves", "Flowers"], answer: 2 },
+                    { question: "What is the name of the first artificial satellite launched into space?", options: ["Vostok 1", "Sputnik 1", "Apollo 11", "Explorer 1"], answer: 1 },
+                    { question: "What is the boiling point of water?", options: ["100°C", "0°C", "50°C", "150°C"], answer: 0 },
+                    { question: "What is the main function of the digestive system?", options: ["Transport oxygen", "Break down food", "Regulate temperature", "Produce hormones"], answer: 1 },
+                    { question: "What element has the atomic number 1?", options: ["Hydrogen", "Helium", "Oxygen", "Carbon"], answer: 0 },
+                    { question: "What is the most common blood type in humans?", options: ["A", "B", "AB", "O"], answer: 3 },
+                    { question: "What part of the human brain is responsible for coordinating movement?", options: ["Cerebrum", "Cerebellum", "Brainstem", "Thalamus"], answer: 1 },
+                    { question: "What is the chemical symbol for gold?", options: ["Ag", "Au", "Pb", "Fe"], answer: 1 },
+                    { question: "What do you call a substance that speeds up a chemical reaction?", options: ["Catalyst", "Reactant", "Solvent", "Product"], answer: 0 },
+                    { question: "What is the term for animals that are active during the night?", options: ["Nocturnal", "Diurnal", "Crepuscular", "Seasonal"], answer: 0 },
+                    { question: "What is the main gas found in the air we breathe?", options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Argon"], answer: 2 },
+                    { question: "What is the primary function of the lungs?", options: ["Filter blood", "Produce hormones", "Exchange gases", "Digest food"], answer: 2 },
+                    { question: "What type of energy is stored in food?", options: ["Kinetic energy", "Potential energy", "Chemical energy", "Thermal energy"], answer: 2 },
+                    { question: "What is the scientific study of fungi called?", options: ["Mycology", "Botany", "Zoology", "Bacteriology"], answer: 0 },
+                    { question: "What is the name of the galaxy that contains our Solar System?", options: ["Andromeda", "Milky Way", "Triangulum", "Whirlpool"], answer: 1 },
+                    { question: "What is the hardest rock?", options: ["Basalt", "Granite", "Slate", "Diamond"], answer: 3 },
+                    { question: "What is the process by which cells produce energy?", options: ["Photosynthesis", "Cell respiration", "Fermentation", "Digestion"], answer: 1 },
+                    { question: "What is the name of the protein that carries oxygen in the blood?", options: ["Myoglobin", "Hemoglobin", "Globulin", "Fibrinogen"], answer: 1 },
+                    { question: "What is the term for a change in an organism that results in better survival?", options: ["Mutation", "Adaptation", "Evolution", "Selection"], answer: 1 },
+                    { question: "What type of organism produces its own food?", options: ["Heterotroph", "Autotroph", "Decomposer", "Consumer"], answer: 1 },
+                    { question: "What is the name of the process by which water vapor turns into liquid water?", options: ["Evaporation", "Condensation", "Precipitation", "Transpiration"], answer: 1 },
+                    { question: "What is the term for animals that eat both plants and meat?", options: ["Herbivore", "Carnivore", "Omnivore", "Detritivore"], answer: 2 }
                 ]
             },
             {
                 title: "Geography",
                 questions: [
-                    { question: "What is the capital of France?", options: ["Berlin", "Madrid", "Paris", "Rome"], answer: 2 },
-                    { question: "Which continent is known as the 'Dark Continent'?", options: ["Asia", "Africa", "South America", "Australia"], answer: 1 },
-                    { question: "What is the longest river in the world?", options: ["Amazon", "Nile", "Yangtze", "Mississippi"], answer: 1 },
-                    { question: "What is the smallest country in the world?", options: ["Vatican City", "Monaco", "San Marino", "Nauru"], answer: 0 },
+                    { question: "What is the capital of France?", options: ["Berlin", "Madrid", "Rome", "Paris"], answer: 3 },
+                    { question: "What is the largest continent?", options: ["Asia", "Africa", "North America", "Europe"], answer: 0 },
                     { question: "Which ocean is the largest?", options: ["Atlantic", "Indian", "Arctic", "Pacific"], answer: 3 },
-                    // Add 40 more questions for Geography here
-                    { question: "What is the capital of Japan?", options: ["Seoul", "Tokyo", "Beijing", "Bangkok"], answer: 1 },
-                    { question: "What is the largest desert in the world?", options: ["Sahara", "Gobi", "Kalahari", "Arabian"], answer: 0 },
-                    { question: "Which mountain range separates Europe and Asia?", options: ["Andes", "Rockies", "Himalayas", "Ural"], answer: 3 },
-                    { question: "What is the largest continent by area?", options: ["Africa", "Asia", "North America", "Antarctica"], answer: 1 },
-                    { question: "Which country is known as the Land of the Rising Sun?", options: ["China", "Japan", "Thailand", "Vietnam"], answer: 1 },
-                    { question: "What is the capital city of Australia?", options: ["Sydney", "Canberra", "Melbourne", "Brisbane"], answer: 1 },
-                    { question: "Which river runs through Egypt?", options: ["Nile", "Amazon", "Yangtze", "Mississippi"], answer: 0 },
-                    { question: "What is the largest island in the world?", options: ["Greenland", "New Guinea", "Borneo", "Madagascar"], answer: 0 },
-                    { question: "Which country has the most natural lakes?", options: ["Canada", "Russia", "United States", "India"], answer: 0 },
-                    { question: "What is the capital of Canada?", options: ["Toronto", "Vancouver", "Ottawa", "Montreal"], answer: 2 },
-                    { question: "Which continent is the Sahara Desert located in?", options: ["Asia", "Africa", "North America", "Australia"], answer: 1 },
-                    { question: "Which country is known as the 'Pearl of Africa'?", options: ["Uganda", "Kenya", "Tanzania", "Rwanda"], answer: 0 },
-                    { question: "What is the capital of Italy?", options: ["Rome", "Venice", "Florence", "Milan"], answer: 0 },
-                    { question: "What is the largest country in the world by land area?", options: ["Canada", "China", "Russia", "United States"], answer: 2 },
-                    { question: "Which ocean is located to the east of Africa?", options: ["Atlantic", "Pacific", "Indian", "Arctic"], answer: 2 },
-                    { question: "Which country is both an island and a continent?", options: ["Australia", "Greenland", "New Zealand", "Iceland"], answer: 0 },
-                    { question: "What is the official language of Brazil?", options: ["Spanish", "Portuguese", "French", "English"], answer: 1 },
-                    { question: "Which U.S. state is known as the 'Sunshine State'?", options: ["California", "Texas", "Florida", "Hawaii"], answer: 2 },
-                    { question: "What is the currency of Japan?", options: ["Yen", "Won", "Dollar", "Euro"], answer: 0 },
-                    { question: "Which city is known as the 'Big Apple'?", options: ["Los Angeles", "New York City", "Chicago", "Miami"], answer: 1 },
                     { question: "What is the tallest mountain in the world?", options: ["K2", "Kangchenjunga", "Mount Everest", "Lhotse"], answer: 2 },
-                    { question: "Which river is the longest in North America?", options: ["Mississippi", "Missouri", "Ohio", "Rio Grande"], answer: 0 },
+                    { question: "Which desert is the largest?", options: ["Sahara", "Gobi", "Kalahari", "Arctic"], answer: 0 },
+                    { question: "What is the longest river in the world?", options: ["Amazon", "Nile", "Yangtze", "Mississippi"], answer: 1 },
+                    { question: "Which country has the most natural lakes?", options: ["Canada", "Russia", "USA", "India"], answer: 0 },
+                    { question: "What is the largest country in the world?", options: ["China", "USA", "Canada", "Russia"], answer: 3 },
+                    { question: "Which continent is known as the 'Dark Continent'?", options: ["Asia", "Africa", "Australia", "South America"], answer: 1 },
+                    { question: "What is the smallest country in the world?", options: ["Vatican City", "Monaco", "Nauru", "San Marino"], answer: 0 },
+                    { question: "What is the capital of Japan?", options: ["Kyoto", "Tokyo", "Osaka", "Seoul"], answer: 1 },
+                    { question: "Which river flows through Egypt?", options: ["Amazon", "Yangtze", "Nile", "Ganges"], answer: 2 },
+                    { question: "Which country is known as the Land of the Rising Sun?", options: ["China", "Japan", "Thailand", "Vietnam"], answer: 1 },
+                    { question: "What is the capital of Australia?", options: ["Sydney", "Canberra", "Melbourne", "Brisbane"], answer: 1 },
+                    { question: "What is the official language of Brazil?", options: ["Spanish", "Portuguese", "English", "French"], answer: 1 },
+                    { question: "Which mountain range separates Europe from Asia?", options: ["Rocky Mountains", "Andes", "Ural Mountains", "Himalayas"], answer: 2 },
+                    { question: "Which is the largest island in the world?", options: ["Greenland", "New Guinea", "Borneo", "Madagascar"], answer: 0 },
+                    { question: "What is the currency of the United Kingdom?", options: ["Dollar", "Euro", "Pound", "Yen"], answer: 2 },
+                    { question: "Which city is known as the Big Apple?", options: ["Los Angeles", "Chicago", "New York City", "Miami"], answer: 2 },
+                    { question: "What is the largest desert in the world?", options: ["Antarctic Desert", "Sahara Desert", "Arabian Desert", "Gobi Desert"], answer: 0 },
+                    { question: "What is the capital of Italy?", options: ["Florence", "Milan", "Rome", "Venice"], answer: 2 },
+                    { question: "Which ocean is between Africa and Australia?", options: ["Indian Ocean", "Pacific Ocean", "Atlantic Ocean", "Southern Ocean"], answer: 0 },
+                    { question: "What is the longest river in South America?", options: ["Nile", "Amazon", "Orinoco", "Paraná"], answer: 1 },
                     { question: "What is the capital of Egypt?", options: ["Cairo", "Alexandria", "Giza", "Luxor"], answer: 0 },
-                    { question: "Which continent is known for its wildlife and biodiversity?", options: ["Asia", "Europe", "Africa", "North America"], answer: 2 },
-                    { question: "What is the name of the large desert located in Australia?", options: ["Great Sandy Desert", "Gobi Desert", "Sahara Desert", "Kalahari Desert"], answer: 0 },
-                    { question: "Which country is known for the Great Wall?", options: ["Japan", "India", "China", "South Korea"], answer: 2 },
-                    { question: "What is the longest mountain range in the world?", options: ["Himalayas", "Andes", "Rockies", "Appalachians"], answer: 1 },
-                    { question: "Which U.S. state is known as the 'Garden State'?", options: ["California", "Texas", "New Jersey", "Florida"], answer: 2 },
-                    { question: "What is the smallest continent?", options: ["Australia", "Europe", "Antarctica", "Asia"], answer: 0 },
+                    { question: "Which continent has the largest land area?", options: ["Asia", "Africa", "North America", "Antarctica"], answer: 0 },
+                    { question: "What is the smallest continent?", options: ["Australia", "Europe", "Antarctica", "South America"], answer: 0 },
+                    { question: "What is the capital of Canada?", options: ["Toronto", "Vancouver", "Ottawa", "Montreal"], answer: 2 },
+                    { question: "Which country is known for its fjords?", options: ["Iceland", "Norway", "Sweden", "Finland"], answer: 1 },
+                    { question: "What is the official currency of Japan?", options: ["Yen", "Won", "Dollar", "Euro"], answer: 0 },
+                    { question: "What is the capital of Mexico?", options: ["Cancun", "Guadalajara", "Tijuana", "Mexico City"], answer: 3 },
+                    { question: "What mountain range is known for the Rocky Mountains?", options: ["Andes", "Alps", "Himalayas", "Rocky Mountains"], answer: 3 },
+                    { question: "What is the largest lake in Africa?", options: ["Lake Victoria", "Lake Tanganyika", "Lake Malawi", "Lake Albert"], answer: 0 },
+                    { question: "Which country is famous for the Great Barrier Reef?", options: ["Australia", "USA", "Mexico", "Brazil"], answer: 0 },
+                    { question: "What is the currency of China?", options: ["Yen", "Dollar", "Rupee", "Renminbi"], answer: 3 },
+                    { question: "What is the capital of Spain?", options: ["Lisbon", "Madrid", "Barcelona", "Valencia"], answer: 1 },
+                    { question: "What is the capital of India?", options: ["New Delhi", "Mumbai", "Kolkata", "Chennai"], answer: 0 },
+                    { question: "What is the highest waterfall in the world?", options: ["Niagara Falls", "Angel Falls", "Victoria Falls", "Iguazu Falls"], answer: 1 },
+                    { question: "What is the official language of Canada?", options: ["English", "French", "Spanish", "Both English and French"], answer: 3 },
+                    { question: "Which river runs through London?", options: ["Thames", "Seine", "Danube", "Rhine"], answer: 0 },
+                    { question: "What is the capital of Russia?", options: ["Moscow", "St. Petersburg", "Kazan", "Novosibirsk"], answer: 0 },
+                    { question: "What is the capital of South Korea?", options: ["Seoul", "Busan", "Incheon", "Daegu"], answer: 0 }
+                ]
+            },
+            {
+                title: "Literature",
+                questions: [
+                    { question: "Who wrote 'Pride and Prejudice'?", options: ["Charlotte Brontë", "Jane Austen", "Mary Shelley", "Emily Dickinson"], answer: 1 },
+                    { question: "What is the main theme of '1984'?", options: ["Love", "War", "Totalitarianism", "Freedom"], answer: 2 },
+                    { question: "Who is the author of 'Moby Dick'?", options: ["Mark Twain", "Herman Melville", "Ernest Hemingway", "F. Scott Fitzgerald"], answer: 1 },
+                    { question: "What novel features the character Atticus Finch?", options: ["The Great Gatsby", "To Kill a Mockingbird", "Pride and Prejudice", "1984"], answer: 1 },
+                    { question: "Who wrote the play 'Hamlet'?", options: ["Charles Dickens", "William Shakespeare", "Tennessee Williams", "F. Scott Fitzgerald"], answer: 1 },
+                    { question: "Which novel begins with 'Call me Ishmael'?", options: ["Moby Dick", "The Catcher in the Rye", "Great Expectations", "War and Peace"], answer: 0 },
+                    { question: "What is the main character's name in 'The Catcher in the Rye'?", options: ["Holden Caulfield", "Jay Gatsby", "Huckleberry Finn", "Tom Sawyer"], answer: 0 },
+                    { question: "What is the title of the first Harry Potter book?", options: ["Harry Potter and the Philosopher's Stone", "Harry Potter and the Chamber of Secrets", "Harry Potter and the Prisoner of Azkaban", "Harry Potter and the Goblet of Fire"], answer: 0 },
+                    { question: "Who wrote 'The Odyssey'?", options: ["Homer", "Virgil", "Ovid", "Sophocles"], answer: 0 },
+                    { question: "What is the primary genre of 'The Hobbit'?", options: ["Fantasy", "Science Fiction", "Horror", "Historical Fiction"], answer: 0 },
+                    { question: "Who wrote 'The Picture of Dorian Gray'?", options: ["Oscar Wilde", "F. Scott Fitzgerald", "Ernest Hemingway", "Mark Twain"], answer: 0 },
+                    { question: "What type of poem has 14 lines?", options: ["Haiku", "Sonnet", "Limerick", "Ode"], answer: 1 },
+                    { question: "Who is the main character in 'The Great Gatsby'?", options: ["F. Scott Fitzgerald", "Jay Gatsby", "Nick Carraway", "Daisy Buchanan"], answer: 1 },
+                    { question: "What is the primary setting of 'To Kill a Mockingbird'?", options: ["New York", "Alabama", "California", "Georgia"], answer: 1 },
+                    { question: "Who wrote 'Brave New World'?", options: ["Aldous Huxley", "George Orwell", "Ray Bradbury", "H.G. Wells"], answer: 0 },
+                    { question: "What is the main theme of 'The Grapes of Wrath'?", options: ["The American Dream", "Social Injustice", "Love", "War"], answer: 1 },
+                    { question: "Who is the author of 'The Fault in Our Stars'?", options: ["John Green", "Suzanne Collins", "Stephen King", "Rainbow Rowell"], answer: 0 },
+                    { question: "What is the primary setting of 'Wuthering Heights'?", options: ["London", "Hogwarts", "Yorkshire", "Edinburgh"], answer: 2 },
+                    { question: "Who wrote 'The Adventures of Huckleberry Finn'?", options: ["Mark Twain", "Ernest Hemingway", "J.D. Salinger", "F. Scott Fitzgerald"], answer: 0 },
+                    { question: "What is the title of the second Harry Potter book?", options: ["Harry Potter and the Philosopher's Stone", "Harry Potter and the Chamber of Secrets", "Harry Potter and the Prisoner of Azkaban", "Harry Potter and the Goblet of Fire"], answer: 1 },
+                    { question: "What is the main conflict in 'Romeo and Juliet'?", options: ["Family feud", "Class struggle", "War", "Love triangle"], answer: 0 },
+                    { question: "Who wrote 'Frankenstein'?", options: ["Jane Austen", "Mary Shelley", "Charlotte Brontë", "Emily Dickinson"], answer: 1 },
+                    { question: "What is the primary genre of 'The Hunger Games'?", options: ["Fantasy", "Dystopian", "Science Fiction", "Romance"], answer: 1 }
+                ]
+            },
+            {
+                title: "Science",
+                questions: [
+                    { question: "What is the chemical symbol for water?", options: ["H2O", "O2", "CO2", "NaCl"], answer: 0 },
+                    { question: "What planet is known as the Red Planet?", options: ["Earth", "Mars", "Jupiter", "Venus"], answer: 1 },
+                    { question: "What gas do plants absorb from the atmosphere?", options: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"], answer: 2 },
+                    { question: "What is the speed of light?", options: ["300,000 km/s", "150,000 km/s", "1,000 km/s", "3,000 km/s"], answer: 0 },
+                    { question: "What is the powerhouse of the cell?", options: ["Nucleus", "Mitochondria", "Ribosome", "Chloroplast"], answer: 1 },
+                    { question: "What is the largest organ in the human body?", options: ["Heart", "Liver", "Skin", "Lungs"], answer: 2 },
+                    { question: "What is the main gas found in the air we breathe?", options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"], answer: 2 },
+                    { question: "What is the boiling point of water?", options: ["0°C", "100°C", "50°C", "150°C"], answer: 1 },
+                    { question: "What is the primary function of red blood cells?", options: ["Transport oxygen", "Fight infection", "Clot blood", "Digest food"], answer: 0 },
+                    { question: "What is the process by which plants make their food?", options: ["Photosynthesis", "Respiration", "Transpiration", "Fermentation"], answer: 0 },
+                    { question: "What is the hardest natural substance on Earth?", options: ["Gold", "Diamond", "Iron", "Quartz"], answer: 1 },
+                    { question: "What is the smallest unit of life?", options: ["Cell", "Atom", "Molecule", "Organism"], answer: 0 },
+                    { question: "What type of animal is a dolphin?", options: ["Mammal", "Fish", "Reptile", "Amphibian"], answer: 0 },
+                    { question: "What is the main organ in the circulatory system?", options: ["Heart", "Liver", "Lung", "Kidney"], answer: 0 },
+                    { question: "What is the process of converting a solid directly into a gas called?", options: ["Evaporation", "Sublimation", "Condensation", "Fusion"], answer: 1 },
+                    { question: "What is the force that keeps us on the ground?", options: ["Friction", "Gravity", "Magnetism", "Electrostatics"], answer: 1 },
+                    { question: "What is the primary component of the sun?", options: ["Hydrogen", "Helium", "Carbon", "Oxygen"], answer: 0 },
+                    { question: "What is the largest planet in our solar system?", options: ["Earth", "Mars", "Jupiter", "Saturn"], answer: 2 },
+                    { question: "What type of bond involves the sharing of electrons?", options: ["Ionic bond", "Covalent bond", "Hydrogen bond", "Metallic bond"], answer: 1 },
+                    { question: "What is the most abundant gas in Earth's atmosphere?", options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Argon"], answer: 2 },
+                    { question: "What is the name of the galaxy we live in?", options: ["Andromeda", "Milky Way", "Triangulum", "Whirlpool"], answer: 1 },
+                    { question: "What is the study of living organisms called?", options: ["Biology", "Chemistry", "Physics", "Geology"], answer: 0 }
+                ]
+            },
+            {
+                title: "History",
+                questions: [
+                    { question: "Who was the first president of the United States?", options: ["George Washington", "Abraham Lincoln", "Thomas Jefferson", "John Adams"], answer: 0 },
+                    { question: "What year did World War II end?", options: ["1945", "1939", "1941", "1950"], answer: 0 },
+                    { question: "Who discovered America?", options: ["Leif Erikson", "Christopher Columbus", "Ferdinand Magellan", "Vasco da Gama"], answer: 1 },
+                    { question: "What was the ancient civilization in Egypt known for?", options: ["Pyramids", "Ziggurats", "Temples", "Castles"], answer: 0 },
+                    { question: "Who was known as the Iron Lady?", options: ["Margaret Thatcher", "Angela Merkel", "Golda Meir", "Indira Gandhi"], answer: 0 },
+                    { question: "What year did the Titanic sink?", options: ["1912", "1905", "1915", "1920"], answer: 0 },
+                    { question: "Which war was fought between the North and South regions in the United States?", options: ["World War I", "World War II", "Civil War", "Revolutionary War"], answer: 2 },
+                    { question: "Who was the first man to walk on the moon?", options: ["Neil Armstrong", "Buzz Aldrin", "Yuri Gagarin", "John Glenn"], answer: 0 },
+                    { question: "What ancient city was buried by a volcanic eruption?", options: ["Pompeii", "Athens", "Rome", "Carthage"], answer: 0 },
+                    { question: "Who wrote the Declaration of Independence?", options: ["George Washington", "Thomas Jefferson", "Benjamin Franklin", "John Adams"], answer: 1 },
+                    { question: "What was the primary cause of World War I?", options: ["Imperialism", "Nationalism", "Alliances", "Militarism"], answer: 2 },
+                    { question: "Who was the first female Prime Minister of the UK?", options: ["Theresa May", "Margaret Thatcher", "Angela Merkel", "Indira Gandhi"], answer: 1 },
+                    { question: "What was the ancient civilization in Mesopotamia known for?", options: ["Writing", "Mathematics", "Agriculture", "All of the above"], answer: 3 },
+                    { question: "What was the name of the ship that brought the Pilgrims to America?", options: ["Mayflower", "Santa Maria", "Nina", "Pinta"], answer: 0 },
+                    { question: "Who was the leader of the Soviet Union during World War II?", options: ["Stalin", "Trotsky", "Lenin", "Gorbachev"], answer: 0 },
+                    { question: "What is the study of past events called?", options: ["Anthropology", "Sociology", "History", "Archaeology"], answer: 2 },
+                    { question: "Who was the first female astronaut in space?", options: ["Valentina Tereshkova", "Sally Ride", "Mae Jemison", "Eileen Collins"], answer: 0 },
+                    { question: "What was the name of the last Tsar of Russia?", options: ["Nicholas II", "Alexander III", "Peter I", "Catherine II"], answer: 0 },
+                    { question: "What was the main purpose of the Berlin Wall?", options: ["Prevent migration", "Promote tourism", "Increase trade", "Enhance security"], answer: 0 },
+                    { question: "What event started World War I?", options: ["Assassination of Archduke Ferdinand", "Invasion of Poland", "Bombing of Pearl Harbor", "Fall of the Berlin Wall"], answer: 0 }
+                ]
+            },
+            {
+                title: "Geography",
+                questions: [
+                    { question: "What is the capital of France?", options: ["Berlin", "Madrid", "Rome", "Paris"], answer: 3 },
+                    { question: "What is the largest continent?", options: ["Africa", "Asia", "North America", "Antarctica"], answer: 1 },
+                    { question: "Which river is the longest in the world?", options: ["Amazon", "Nile", "Yangtze", "Mississippi"], answer: 1 },
+                    { question: "What is the smallest country in the world?", options: ["Vatican City", "Monaco", "Nauru", "Tuvalu"], answer: 0 },
+                    { question: "Which ocean is the largest?", options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"], answer: 3 },
+                    { question: "What is the capital of Japan?", options: ["Tokyo", "Seoul", "Beijing", "Bangkok"], answer: 0 },
+                    { question: "What mountain range separates Europe and Asia?", options: ["Andes", "Rockies", "Himalayas", "Ural"], answer: 3 },
+                    { question: "What is the largest desert in the world?", options: ["Sahara", "Gobi", "Kalahari", "Arctic"], answer: 0 },
+                    { question: "Which country has the largest population?", options: ["India", "USA", "China", "Indonesia"], answer: 2 },
+                    { question: "What is the capital of Canada?", options: ["Toronto", "Vancouver", "Ottawa", "Montreal"], answer: 2 },
+                    { question: "Which continent is known as the Dark Continent?", options: ["Asia", "Africa", "Australia", "Antarctica"], answer: 1 },
+                    { question: "What is the currency of the United Kingdom?", options: ["Dollar", "Euro", "Pound", "Yen"], answer: 2 },
+                    { question: "Which country is home to the kangaroo?", options: ["USA", "Canada", "Australia", "New Zealand"], answer: 2 },
+                    { question: "What is the largest island in the world?", options: ["Greenland", "New Guinea", "Borneo", "Madagascar"], answer: 0 },
+                    { question: "What country is known as the Land of the Rising Sun?", options: ["China", "Japan", "Thailand", "Vietnam"], answer: 1 },
+                    { question: "Which river runs through Egypt?", options: ["Amazon", "Nile", "Mississippi", "Yangtze"], answer: 1 },
+                    { question: "What is the capital of Italy?", options: ["Florence", "Milan", "Rome", "Venice"], answer: 2 },
+                    { question: "What continent is Brazil located on?", options: ["Africa", "North America", "South America", "Europe"], answer: 2 },
+                    { question: "What is the most spoken language in the world?", options: ["English", "Spanish", "Mandarin", "Hindi"], answer: 2 },
+                    { question: "Which country is known for its pyramids?", options: ["Egypt", "Mexico", "China", "Greece"], answer: 0 }
                 ]
             }
         ];
 
-        const createQuestion = (questionData) => {
-            const questionDiv = document.createElement('div');
-            questionDiv.classList.add('question');
+        // Add categories to the page
+        const categoriesContainer = document.getElementById('categories');
+        categories.forEach((category, index) => {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.classList.add('category');
+            categoryDiv.innerHTML = `<h2>${category.title}</h2>`;
             
-            const questionText = document.createElement('p');
-            questionText.textContent = questionData.question;
-            questionDiv.appendChild(questionText);
-
-            questionData.options.forEach((option, index) => {
-                const label = document.createElement('label');
-                const input = document.createElement('input');
-                input.type = 'radio';
-                input.name = questionData.question; // Name should be unique per question
-                input.value = index;
-
-                label.appendChild(input);
-                label.appendChild(document.createTextNode(option));
-                questionDiv.appendChild(label);
+            category.questions.forEach((questionObj, questionIndex) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('question');
+                questionDiv.innerHTML = `
+                    <p>${questionIndex + 1}. ${questionObj.question}</p>
+                    <div class="options">
+                        ${questionObj.options.map((option, optionIndex) => `
+                            <button onclick="checkAnswer(${index}, ${questionIndex}, ${optionIndex})">${option}</button>
+                        `).join('')}
+                    </div>
+                `;
+                categoryDiv.appendChild(questionDiv);
             });
 
-            return questionDiv;
-        };
+            categoriesContainer.appendChild(categoryDiv);
+        });
 
-        const displayCategory = (categoryIndex) => {
-            const questionsContainer = document.getElementById('questions-container');
-            questionsContainer.innerHTML = '';
-
-            const category = categories[categoryIndex];
-            const categoryTitle = document.createElement('h2');
-            categoryTitle.textContent = category.title;
-            questionsContainer.appendChild(categoryTitle);
-
-            category.questions.forEach(question => {
-                const questionElement = createQuestion(question);
-                questionsContainer.appendChild(questionElement);
-            });
-        };
-
-        const displayCategories = () => {
-            const categoriesContainer = document.getElementById('categories-container');
-            categoriesContainer.innerHTML = '';
-
-            categories.forEach((category, index) => {
-                const button = document.createElement('button');
-                button.textContent = category.title;
-                button.onclick = () => displayCategory(index);
-                categoriesContainer.appendChild(button);
-            });
-        };
-
-        const submitAnswers = () => {
-            const answers = [];
-            categories.forEach((category, catIndex) => {
-                category.questions.forEach((question, quesIndex) => {
-                    const input = document.querySelector(`input[name="${question.question}"]:checked`);
-                    if (input) {
-                        answers.push({
-                            category: category.title,
-                            question: question.question,
-                            answer: input.value,
-                            correct: input.value == question.answer
-                        });
-                    }
-                });
-            });
-
-            console.log(answers); // This is where you would process the results
-            alert('Your answers have been submitted! Check the console for results.');
-        };
-
-        document.getElementById('submit-button').onclick = submitAnswers;
-
-        // Initialize the app
-        displayCategories();
+        // Check the answer and update score
+        function checkAnswer(categoryIndex, questionIndex, optionIndex) {
+            const selectedOption = categories[categoryIndex].questions[questionIndex].options[optionIndex];
+            const correctAnswer = categories[categoryIndex].questions[questionIndex].options[categories[categoryIndex].questions[questionIndex].answer];
+            if (selectedOption === correctAnswer) {
+                alert('Correct!');
+            } else {
+                alert(`Wrong! The correct answer is: ${correctAnswer}`);
+            }
+        }
     </script>
 </body>
 </html>
